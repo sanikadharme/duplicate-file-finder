@@ -5,37 +5,35 @@
 #include <set>
 #include <fstream>
 
-using namespace std;
-namespace fs = filesystem;
+namespace fs = std::filesystem;
 
 // Class responsible for scanning directories and finding duplicate source files
 class DuplicateFileFinder
 {
 private:
-    string rootPath;
+    std::string rootPath;
 
     // Stores: filename -> set of project paths
-    map<string, set<string>> fileProjects;
+    std::map<std::string, std::set<std::string>> fileProjects;
 
     // Stores grouped duplicate files: set of project paths -> list of filenames
-    map<set<string>, vector<string>> grouped;
+    std::map<std::set<std::string>, std::vector<std::string>> grouped;
 
     // Checks whether file extension is valid
-    bool isValidExtension(const string &extension)
+    bool isValidExtension(const std::string &extension)
     {
-        static const set<string> validExtensions =
-        {
-            ".c",
-            ".cpp",
-            ".h",
-            ".rc"
-        };
+        static const std::set<std::string> validExtensions =
+            {
+                ".c",
+                ".cpp",
+                ".h",
+                ".rc"};
 
         return validExtensions.find(extension) != validExtensions.end();
     }
 
-    public:
-    DuplicateFileFinder(const string &path)
+public:
+    DuplicateFileFinder(const std::string &path)
     {
         rootPath = path;
     }
@@ -54,7 +52,7 @@ private:
             fs::path path = entry.path();
 
             // Get file extension
-            string extension = path.extension().string();
+            std::string extension = path.extension().string();
 
             // Ignore unsupported file types
             if (!isValidExtension(extension))
@@ -62,12 +60,12 @@ private:
                 continue;
             }
 
-            string fileName = path.filename().string();
+            std::string fileName = path.filename().string();
 
-            string projectPath = path.parent_path().string();
+            std::string projectPath = path.parent_path().string();
 
             // Store: filename -> project path
-             fileProjects[fileName].insert(projectPath);
+            fileProjects[fileName].insert(projectPath);
         }
     }
 
@@ -83,16 +81,16 @@ private:
     // Displays duplicate files and saves output to file
     void displayAndSaveResults()
     {
-        ofstream outFile("output.txt");
+        std::ofstream outFile("output.txt");
 
-        cout << endl;
-        cout << "Duplicate Files Found:" << endl;
-        cout << "======================" << endl;
-        cout << endl;
+        std::cout << std::endl;
+        std::cout << "Duplicate Files Found:" << std::endl;
+        std::cout << "======================" << std::endl;
+        std::cout << std::endl;
 
-        outFile << "Duplicate Files Found:" << endl;
-        outFile << "======================" << endl;
-        outFile << endl;
+        outFile << "Duplicate Files Found:" << std::endl;
+        outFile << "======================" << std::endl;
+        outFile << std::endl;
 
         for (const auto &group : grouped)
         {
@@ -103,23 +101,23 @@ private:
 
             for (const auto &project : group.first)
             {
-                cout << project << endl;
-                outFile << project << endl;
+                std::cout << project << std::endl;
+                outFile << project << std::endl;
             }
 
             for (const auto &fileName : group.second)
             {
-                cout << "\t" << fileName << endl;
-                outFile << "\t" << fileName << endl;
+                std::cout << "\t" << fileName << std::endl;
+                outFile << "\t" << fileName << std::endl;
             }
 
-            cout << endl;
-            outFile << endl;
+            std::cout << std::endl;
+            outFile << std::endl;
         }
 
         outFile.close();
 
-        cout << "Results saved to output.txt" << endl;
+        std::cout << "Results saved to output.txt" << std::endl;
     }
 };
 
@@ -128,12 +126,12 @@ int main(int argc, char *argv[])
     // Check command line argument
     if (argc < 2)
     {
-        cout << "Usage: app.exe <directory_path>" << endl;
+        std::cout << "Usage: app.exe <directory_path>" << std::endl;
         return 1;
     }
 
     // Read directory path from command line
-    string rootPath = argv[1];
+    std::string rootPath = argv[1];
 
     DuplicateFileFinder finder(rootPath);
 
@@ -145,3 +143,7 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
+
+
+
