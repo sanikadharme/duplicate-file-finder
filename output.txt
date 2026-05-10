@@ -1,0 +1,12 @@
+Duplicate Files Found:
+======================
+
+/home/sanika/TestFolder/A
+/home/sanika/TestFolder/B
+	main.cpp
+	util.h
+
+/home/sanika/TestFolder/B
+/home/sanika/TestFolder/C
+	test.c
+
